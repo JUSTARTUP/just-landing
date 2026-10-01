@@ -914,6 +914,13 @@ img {
   .hero-slogan {
     font-size: 15px;
   }
+  /* 첫 화면 = 화면 높이 - 모바일 헤더(66px), scroll down 아래 여백은 데스크톱의 절반 정도 */
+  .hero {
+    height: calc(var(--screen-h, 100vh) - 66px);
+  }
+  .hero-scroll {
+    bottom: 45px;
+  }
   .story-tagline,
   .story-years {
     font-size: 32px;
