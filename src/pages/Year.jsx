@@ -25,7 +25,7 @@ export default function Year() {
           const hasRight = col === 1 && 2 * row + 1 < n
           const hasDown = pos === 1 && i + 1 < n
           return (
-            <li key={i} className="timeline-step reveal" style={{ gridRow: row + 1, gridColumn: col, '--i': col - 1 }}>
+            <li key={i} className="timeline-step reveal" style={{ gridRow: row + 1, gridColumn: col, '--i': i }}>
               {text}
               {hasRight && <img className="timeline-h" src="assets/line-h.svg" width="120" height="4" alt="" />}
               {hasDown && (
