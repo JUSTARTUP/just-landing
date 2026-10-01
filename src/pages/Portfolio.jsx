@@ -1,15 +1,13 @@
-import site from '../data/site.json'
+import { useSite } from '../lib/siteData.js'
 
 const PER_ROW = 3
 
-function Prize({ title, award, url }) {
-  const body = <>🏆 {title} <b>{award}</b></>
-  return url
-    ? <a className="prize" href={url} target="_blank" rel="noreferrer">{body}</a>
-    : <div className="prize">{body}</div>
+function Prize({ title, award }) {
+  return <div className="prize">🏆 {title} <b>{award}</b></div>
 }
 
 export default function Portfolio() {
+  const site = useSite()
   const rows = []
   for (let i = 0; i < site.prizes.length; i += PER_ROW) rows.push(site.prizes.slice(i, i + PER_ROW))
 
@@ -44,8 +42,8 @@ export default function Portfolio() {
             </>
           )
           return p.url
-            ? <a key={p.name} className="project reveal" style={{ '--i': i % 4 }} href={p.url} target="_blank" rel="noreferrer">{card}</a>
-            : <div key={p.name} className="project reveal" style={{ '--i': i % 4 }}>{card}</div>
+            ? <a key={p.id ?? p.name} className="project reveal" style={{ '--i': i % 4 }} href={p.url} target="_blank" rel="noreferrer">{card}</a>
+            : <div key={p.id ?? p.name} className="project reveal" style={{ '--i': i % 4 }}>{card}</div>
         })}
       </div>
     </main>

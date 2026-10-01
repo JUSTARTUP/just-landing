@@ -1,8 +1,12 @@
-import site from '../data/site.json'
+import { generation, useSite } from '../lib/siteData.js'
+
+// 일정 문구의 {기수}·{다음연도}는 년도에 맞춰 채워짐 (백오피스에서 년도만 바꾸면 따라감)
+const fill = (text, year) => text.replaceAll('{기수}', generation(year)).replaceAll('{다음연도}', year + 1)
 
 // 지그재그 타임라인: 짝수 행은 왼→오, 홀수 행은 오→왼으로 이어짐
 export default function Year() {
-  const steps = site.yearSteps
+  const site = useSite()
+  const steps = site.yearSteps.map((s) => fill(s, site.year))
   const n = steps.length
 
   return (

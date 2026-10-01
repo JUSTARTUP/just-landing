@@ -1,8 +1,7 @@
 import { useRef } from 'react'
-import site from '../data/site.json'
+import { FOUNDED, useSite } from '../lib/siteData.js'
 import { scrollToElement } from '../lib/scroll.js'
 
-const FOUNDED = 2022
 const JUST_STACK = Array.from({ length: 16 }, (_, i) => `assets/just-${String(i + 1).padStart(2, '0')}.svg`)
 
 const CHOICES = [
@@ -48,6 +47,7 @@ function ViewMore({ href }) {
 }
 
 export default function Home() {
+  const site = useSite()
   const years = site.year - FOUNDED
   const storyRef = useRef(null)
 

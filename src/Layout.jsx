@@ -1,16 +1,17 @@
 import { useEffect, useRef } from 'react'
-import site from './data/site.json'
-
-const NAV = [
-  ['ABOUT.', '#/'],
-  ['PORTFOLIO', '#/portfolio'],
-  [String(site.year), `#/${site.year}`],
-  ['Q&A', '#/qna'],
-]
+import { useSite } from './lib/siteData.js'
 
 const SECRET_CLICKS = 10
 
 export default function Layout({ path, children }) {
+  const site = useSite()
+  const nav = [
+    ['ABOUT.', '#/'],
+    ['PORTFOLIO', '#/portfolio'],
+    [String(site.year), `#/${site.year}`],
+    ['Q&A', '#/qna'],
+  ]
+
   // 푸터 로고를 연속 10번 클릭하면 백오피스로 이동 (1.5초 멈추면 초기화)
   const clicks = useRef({ count: 0, timer: 0 })
   const onLogoClick = () => {
@@ -42,7 +43,7 @@ export default function Layout({ path, children }) {
       show.disconnect()
       reset.disconnect()
     }
-  }, [path])
+  }, [path, site]) // 데이터가 실시간으로 바뀌어 새 요소가 생겨도 다시 관찰
 
   return (
     <>
@@ -51,7 +52,7 @@ export default function Layout({ path, children }) {
           <img src="assets/logo.svg" width="102" height="40" alt="Just" />
         </a>
         <nav className="nav">
-          {NAV.map(([label, href]) => (
+          {nav.map(([label, href]) => (
             <a key={href} href={href}>{label}</a>
           ))}
         </nav>

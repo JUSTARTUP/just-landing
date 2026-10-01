@@ -1,3 +1,10 @@
+import { generation, useSite } from '../lib/siteData.js'
+
+// 년도에 맞춘 기수 (2022년 = 1기)
+function Generation() {
+  return generation(useSite().year)
+}
+
 const QNA = [
   {
     q: 'Q1. Just가 정확히 어떤 동아리인지 궁금해요',
@@ -6,9 +13,9 @@ const QNA = [
       <>
         <span className="medium">2022년</span> <b>“일반 동아리에서 창업을 하면 어떨까?🤔”</b> 하는 생각으로 Just를 개설하였고,<br />
         <b>창업</b>을 키워드로 Just를 운영하였습니다.<br /><br />
-        하지만, 재작년부터 <b>서비스 개발</b>과 <b>창업</b>을 동시에 진행하게 되었으며,<br />
+        하지만, <span className="medium">2023년</span>부터 <b>서비스 개발</b>과 <b>창업</b>을 동시에 진행하게 되었으며,<br />
         두 개의 어플리케이션과 기타 임베디드 시스템을 비롯한 여러 서비스가 개발되었습니다.<br /><br />
-        <b>Just 4기 여러분</b>은 1학기 전후로 각 분야의 교육을 마치고, 서비스 개발과 창업을 진행하며 여러 대회에 나갈 예정입니다.<br /><br />
+        <b>Just <Generation />기 여러분</b>은 1학기 전후로 각 분야의 교육을 마치고, 서비스 개발과 창업을 진행하며 여러 대회에 나갈 예정입니다.<br /><br />
         그래서 Just는, 이른 나이에 <b>서비스 개발</b>과 <b>창업</b>의 경험을 하며<br />
         <b>세특</b>, <b>커리어</b>, <b>포트폴리오</b>, <b>인맥</b>까지 얻을 수 있는 동아리입니다!🚀
       </>

@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import site from './data/site.json'
 import Layout from './Layout.jsx'
 import Home from './pages/Home.jsx'
 import Portfolio from './pages/Portfolio.jsx'
 import Year from './pages/Year.jsx'
 import Qna from './pages/Qna.jsx'
-import Admin from './pages/Admin.jsx'
+import { SiteContext, useSiteData } from './lib/siteData.js'
 import { scrollToTop } from './lib/scroll.js'
 import './index.css'
 
@@ -23,15 +22,15 @@ fitToScreen()
 addEventListener('resize', fitToScreen)
 addEventListener('hashchange', fitToScreen)
 
+// 백오피스는 들어갈 때만 로드 (Google 로그인 코드가 방문자 번들에 안 섞이게)
+const Admin = lazy(() => import('./pages/Admin.jsx'))
+
 // 해시 라우팅: GitHub Pages는 SPA 경로 폴백이 없어서 #/path 사용
-const routes = {
-  '/': Home,
-  '/portfolio': Portfolio,
-  [`/${site.year}`]: Year,
-  '/qna': Qna,
-}
+const pageFor = (path, year) =>
+  ({ '/': Home, '/portfolio': Portfolio, [`/${year}`]: Year, '/qna': Qna })[path] ?? Home
 
 function App() {
+  const site = useSiteData()
   const [path, setPath] = useState(location.hash.slice(1) || '/')
 
   useEffect(() => {
@@ -43,12 +42,20 @@ function App() {
     return () => removeEventListener('hashchange', onChange)
   }, [])
 
-  if (path === '/admin') return <Admin />
-  const Page = routes[path] ?? Home
+  if (!site) return null // Firestore 첫 응답 대기 (재방문은 로컬 캐시로 즉시)
+  const Page = pageFor(path, site.year)
   return (
-    <Layout path={path}>
-      <Page />
-    </Layout>
+    <SiteContext.Provider value={site}>
+      {path === '/admin' ? (
+        <Suspense fallback={null}>
+          <Admin />
+        </Suspense>
+      ) : (
+        <Layout path={path}>
+          <Page />
+        </Layout>
+      )}
+    </SiteContext.Provider>
   )
 }
 
