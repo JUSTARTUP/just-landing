@@ -121,8 +121,7 @@ img {
   padding: 0 var(--gutter) 100px;
 }
 .footer > img {
-  cursor: pointer;
-  user-select: none;
+  user-select: none; /* 비밀 클릭(백오피스 진입) 티 안 나게 커서는 기본 그대로 */
 }
 .footer-sns {
   display: flex;

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useSite } from './lib/siteData.js'
 
-const SECRET_CLICKS = 10
+const SECRET_CLICKS = 5
 
 export default function Layout({ path, children }) {
   const site = useSite()
@@ -12,7 +12,7 @@ export default function Layout({ path, children }) {
     ['Q&A', '#/qna'],
   ]
 
-  // 푸터 로고를 연속 10번 클릭하면 백오피스로 이동 (1.5초 멈추면 초기화)
+  // 푸터 로고를 연속 5번 클릭하면 백오피스로 이동 (1.5초 멈추면 초기화)
   const clicks = useRef({ count: 0, timer: 0 })
   const onLogoClick = () => {
     const c = clicks.current
