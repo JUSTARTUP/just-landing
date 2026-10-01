@@ -4,7 +4,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JUST</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+    <!-- 영문 제목·메뉴용 Yde street: 영문(~26KB)은 페이지 열자마자 받고, 한글 파일은 한글이 화면에 나올 때만 받음.
+         block: 받는 동안 기본 폰트로 먼저 그렸다가 바뀌는 깜빡임 대신 잠깐 비워둠 (원본 OTF → woff2 서브셋) -->
+    <link rel="preload" href="fonts/ydestreet-B-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="fonts/ydestreet-L-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      @font-face {
+        font-family: "Yde street";
+        src: url("fonts/ydestreet-B-latin.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+20A9, U+20AC, U+2122, U+2190-2199;
+      }
+      @font-face {
+        font-family: "Yde street";
+        src: url("fonts/ydestreet-L-latin.woff2") format("woff2");
+        font-weight: 300;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+20A9, U+20AC, U+2122, U+2190-2199;
+      }
+      @font-face {
+        font-family: "Yde street";
+        src: url("fonts/ydestreet-B-hangul.woff2") format("woff2");
+        font-weight: 700;
+        font-display: swap;
+        unicode-range: U+0100-0130, U+0132-0151, U+0154-1FFF, U+2070-20A8, U+20AA-20AB, U+20AD-2121, U+2123-218F, U+219A-FFFF;
+      }
+      @font-face {
+        font-family: "Yde street";
+        src: url("fonts/ydestreet-L-hangul.woff2") format("woff2");
+        font-weight: 300;
+        font-display: swap;
+        unicode-range: U+0100-0130, U+0132-0151, U+0154-1FFF, U+2070-20A8, U+20AA-20AB, U+20AD-2121, U+2123-218F, U+219A-FFFF;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

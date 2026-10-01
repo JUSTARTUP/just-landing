@@ -24,16 +24,25 @@ const CHOICES = [
 
 const MONTHS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
+const OPTIONAL = <small className="curriculum-opt">(선택)</small>
+
 // 커리큘럼 바 위치: 1528px 폭 트랙 기준 % (Figma 좌표 197~1725)
+// 1024px 미만은 세로 배치: 위 행은 오른쪽 열, 아래 행은 왼쪽 열. m = [top, height]px, mLabel = 줄바꿈 들어간 모바일 문구 (Figma 6:31)
 const CURRICULUM = [
   [
-    { left: 0, width: 33.12, label: '💪🏼 역량 강화교육' },
-    { left: 35.54, width: 64.46, label: '🏆 대회 참가 (선택)' },
+    { left: 0, width: 33.12, label: '💪🏼 역량 강화교육', mLabel: '💪🏼 역량 강화 교육', m: [0, 176] },
+    { left: 35.54, width: 64.46, label: '🏆 대회 참가 (선택)', mLabel: <>🏆 대회 참가{OPTIONAL}</>, m: [207, 462] },
   ],
   [
-    { left: 0, width: 12.37, label: '🔥 공통교육', solid: true },
-    { left: 14.73, width: 32.46, label: '📚 역량 강화 스터디 (선택)', svg: true },
-    { left: 49.61, width: 50.39, label: '📂 메인 프로젝트 참여 or 개인 프로젝트 진행 (선택)' },
+    { left: 0, width: 12.37, label: '🔥 공통교육', solid: true, m: [0, 48] },
+    { left: 14.73, width: 32.46, label: '📚 역량 강화 스터디 (선택)', svg: true, mLabel: <>📚 역량 강화 스터디{OPTIONAL}</>, m: [69, 255] },
+    {
+      left: 49.61,
+      width: 50.39,
+      label: '📂 메인 프로젝트 참여 or 개인 프로젝트 진행 (선택)',
+      mLabel: <>📂 메인 프로젝트 참여<small>또는</small>👤 개인 프로젝트 진행{OPTIONAL}</>,
+      m: [345, 324],
+    },
   ],
 ]
 
@@ -71,6 +80,8 @@ export default function Home() {
             <img key={src} src={src} width="343" height="132.438" alt="" />
           ))}
         </div>
+        {/* 로고 묶음 바로 아래 (모바일에서 글들이 세로로 쌓여도 로고에 붙어 있게 섹션 안에 둠) */}
+        <div className="journey-line" />
 
         <h2 className="story-tagline reveal">
           The<br />
@@ -113,8 +124,6 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="journey-line" />
-
       <section className="choices">
         <h2 className="choices-title reveal">
           자, 이제 <span className="orange">여러분</span>이 <span className="orange">여정</span>을 떠날 시간입니다!
@@ -148,9 +157,16 @@ export default function Home() {
                 <div
                   key={bar.label}
                   className={`curriculum-bar${bar.solid ? ' is-solid' : ''}${bar.svg ? ' is-svg' : ''}`}
-                  style={{ left: `${bar.left}%`, width: `${bar.width}%`, backgroundImage: bar.svg && 'url(assets/curriculum-bar.svg)' }}
+                  style={{
+                    left: `${bar.left}%`,
+                    width: `${bar.width}%`,
+                    backgroundImage: bar.svg && 'url(assets/curriculum-bar.svg)',
+                    '--m-top': `${bar.m[0]}px`,
+                    '--m-height': `${bar.m[1]}px`,
+                  }}
                 >
-                  {bar.label}
+                  <span className="curriculum-label">{bar.label}</span>
+                  <span className="curriculum-label-m">{bar.mLabel ?? bar.label}</span>
                 </div>
               ))}
             </div>

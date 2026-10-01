@@ -23,13 +23,13 @@ export default function Year() {
           const pos = i % 2
           const col = row % 2 === 0 ? pos + 1 : 2 - pos
           const hasRight = col === 1 && 2 * row + 1 < n
-          const hasDown = pos === 1 && i + 1 < n
+          const hasDown = i + 1 < n // 지그재그에선 줄 끝(pos 1)만, 한 줄로 쌓이면(1024px 미만) 모든 단계 사이에 세로선
           return (
             <li key={i} className="timeline-step reveal" style={{ gridRow: row + 1, gridColumn: col, '--i': i }}>
               {text}
               {hasRight && <img className="timeline-h" src="assets/line-h.svg" width="120" height="4" alt="" />}
               {hasDown && (
-                <span className="timeline-v">
+                <span className={`timeline-v${pos === 1 ? '' : ' is-stack-only'}`}>
                   <img src="assets/line-v.svg" width="60" height="3" alt="" />
                 </span>
               )}

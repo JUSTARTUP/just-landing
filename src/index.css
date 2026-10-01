@@ -1,16 +1,4 @@
-@font-face {
-  font-family: "Yde street";
-  src: url("./fonts/YdestreetB.otf") format("opentype");
-  font-weight: 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Yde street";
-  src: url("./fonts/YdestreetL.otf") format("opentype");
-  font-weight: 300;
-  font-display: swap;
-}
-
+/* Yde street @font-face는 index.html에 (preload와 같이 두려고) */
 :root {
   --orange: #faa71b;
   --answer: #e89100;
@@ -85,6 +73,13 @@ img {
   z-index: 10;
   height: 96px;
   padding: 40px var(--gutter) 16px;
+}
+.header-menu {
+  display: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
 }
 /* 반투명+블러 배경을 바 아래로 조금 늘리고, 끝을 그라데이션으로 흐려서 경계가 딱 끊기지 않게 */
 .header::before {
@@ -320,6 +315,9 @@ img {
   left: 50%;
   height: 60px;
 }
+.timeline-v.is-stack-only {
+  display: none;
+}
 .timeline-v img {
   position: absolute;
   top: 50%;
@@ -421,7 +419,7 @@ img {
   align-items: center;
   gap: 14px;
 }
-.story > :not(.story-stack) {
+.story > :not(.story-stack, .journey-line) {
   position: absolute;
 }
 .story-tagline {
@@ -614,6 +612,9 @@ img {
   border-color: transparent;
   background-color: transparent;
 }
+.curriculum-label-m {
+  display: none;
+}
 
 /* ---------- 좁은 화면: 콜라주를 세로 흐름으로 풀기 ---------- */
 @media (max-width: 1023px) {
@@ -629,11 +630,17 @@ img {
     gap: 32px;
     padding: 0 var(--gutter);
   }
-  .story > :not(.story-stack) {
+  .story > :not(.story-stack, .journey-line) {
     position: static;
   }
-  .story-stack {
+  .story-stack,
+  .journey-line {
     order: -1;
+  }
+  .journey-line {
+    flex: none;
+    height: 600px;
+    margin: 0 auto;
   }
   .story-stack img {
     width: 60%;
@@ -646,17 +653,82 @@ img {
   .story-star {
     align-self: flex-end;
   }
+  /* 세로 흐름에선 원본 크기(258·268px)가 화면을 너무 차지해서 축소 */
+  .story-folder,
+  .story-star {
+    width: clamp(110px, 30vw, 180px);
+    height: auto;
+  }
   .choices-cards {
     flex-wrap: wrap;
     padding: 0 var(--gutter);
   }
+  /* 커리큘럼: 월을 세로축으로, 두 줄을 두 열로 (Figma 모바일 6:31, 월 간격 69px) */
   .curriculum-track {
-    overflow-x: auto;
-    padding: 0 var(--gutter);
+    display: grid;
+    grid-template-columns: 20px 1fr 1fr;
+    column-gap: 25px;
+    max-width: 440px;
+    margin-top: 42px;
+    padding: 0 10px; /* 390px 폰에서 Figma와 같은 150px 카드 (본문 여백보다 살짝 좁게) */
   }
-  .curriculum-months,
-  .curriculum-row {
-    min-width: 1528px;
+  .curriculum-months {
+    flex-direction: column;
+    gap: 45px;
+    padding: 12px 0 0;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.4px;
+  }
+  .curriculum-months span {
+    width: auto;
+    line-height: 24px;
+  }
+  .curriculum-row,
+  .curriculum-months + .curriculum-row {
+    grid-row: 1;
+    height: 669px;
+    margin-top: 0;
+  }
+  .curriculum-row:nth-child(2) {
+    grid-column: 3;
+  }
+  .curriculum-row:nth-child(3) {
+    grid-column: 2;
+  }
+  .curriculum-bar,
+  .curriculum-bar.is-solid,
+  .curriculum-bar.is-svg {
+    top: var(--m-top);
+    left: 0 !important;
+    width: 100% !important;
+    height: var(--m-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: rgba(255, 255, 255, 0.8);
+    background: var(--card) none !important;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.32px;
+    white-space: normal;
+  }
+  .curriculum-label {
+    display: none;
+  }
+  .curriculum-label-m {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .curriculum-label-m small {
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .curriculum-label-m .curriculum-opt {
+    color: var(--orange);
   }
   .timeline {
     grid-template-columns: 1fr;
@@ -666,33 +738,154 @@ img {
     grid-row: auto !important;
     transition-delay: 0s; /* 한 줄로 쌓이면 스크롤할 때 하나씩 보이므로 순서 지연 불필요 */
   }
-  .timeline-h,
-  .timeline-v {
+  .timeline-h {
     display: none;
+  }
+  .timeline-v.is-stack-only {
+    display: block;
   }
 }
 
 @media (max-width: 768px) {
+  /* 모바일 헤더: 로고(80px) + 햄버거, 메뉴는 펼치면 아래로 (Figma 6:74) */
   .header {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
     height: auto;
     padding-top: 16px;
   }
+  .header-logo img {
+    width: 80px;
+    height: auto;
+  }
+  .header-menu {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 4px; /* Figma: 로고 위쪽 기준 4px 아래 */
+  }
+  /* 펼친 메뉴: 햄버거 아래 떠 있는 팝업 (아래 내용을 밀지 않음) */
   .nav {
-    gap: 24px;
-    font-size: 14px;
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: var(--gutter);
+    flex-direction: column;
+    gap: 0;
+    min-width: 180px;
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #111;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+    font-size: 16px;
+    transform-origin: top right;
   }
+  .nav a {
+    padding: 12px 16px;
+    border-radius: 10px;
+    transition: background-color 0.15s, color 0.15s;
+  }
+  .nav a:hover,
+  .nav a:active,
+  .nav a:focus-visible {
+    background: #222;
+    color: var(--orange);
+  }
+  .nav.is-open {
+    display: flex;
+    animation: menu-pop 0.18s ease-out;
+  }
+  @keyframes menu-pop {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.96);
+    }
+  }
+  /* 모바일 여백: 글자 축소에 맞춰 섹션 간격·내부 여백도 대략 절반으로 */
   .page {
-    padding-top: 64px;
-    padding-bottom: 120px;
+    padding-top: 40px;
+    padding-bottom: 72px;
   }
+  .home {
+    padding-bottom: 72px;
+  }
+  .footer {
+    padding-bottom: 56px;
+  }
+  /* 헤더 로고(80px)보다 작게, SNS 아이콘도 같은 비율로 */
+  .footer > img {
+    width: 64px;
+    height: auto;
+  }
+  .footer-sns {
+    gap: 20px;
+  }
+  .footer-sns img {
+    width: 27px; /* YouTube 35.6px의 75% */
+    height: auto;
+  }
+  .footer-sns a + a img {
+    width: 22px; /* Instagram 29.6px의 75% */
+  }
+  .projects-title {
+    margin-top: 80px;
+  }
+  .projects {
+    margin-top: 28px;
+  }
+  .timeline {
+    margin-top: 36px;
+    row-gap: 40px;
+  }
+  .timeline-v {
+    height: 40px;
+  }
+  .timeline-v img {
+    width: 40px;
+  }
+  .qna {
+    margin-top: 36px;
+  }
+  .qna-item + .qna-item {
+    margin-top: 36px;
+  }
+  .qna dd {
+    margin-top: 12px;
+  }
+  .choices-cards {
+    margin-top: 40px;
+    gap: 20px;
+  }
+  .curriculum {
+    margin-top: 100px;
+  }
+  /* 모바일 글자 크기: 큰 제목 32px(Figma 커리큘럼 제목 기준) / 본문 14~15px */
   .page-title {
-    font-size: 44px;
+    font-size: 32px;
+  }
+  .page-title > img {
+    width: 48px;
+    height: 48px;
+  }
+  .year-key {
+    width: 64px;
+    height: 64px;
+    margin: -12px 0 -12px -8px;
+  }
+  .year-key img {
+    width: 50px;
+    height: 50px;
+  }
+  .timeline-step {
+    min-height: 0;
+    padding: 20px 16px;
+    font-size: 15px;
+    line-height: 1.5;
   }
   .prizes {
     gap: 12px;
-    margin-inline: 0;
+    margin: 32px 0 0;
   }
   .prize-row,
   .prize-row:nth-child(even) {
@@ -703,8 +896,8 @@ img {
   .prize {
     flex-basis: auto;
     height: auto;
-    padding: 14px 20px;
-    font-size: 15px;
+    padding: 12px 18px;
+    font-size: 14px;
     line-height: 1.4;
     white-space: normal;
   }
@@ -716,41 +909,69 @@ img {
     gap: 16px;
   }
   .project-text {
-    font-size: 18px;
+    font-size: 15px;
   }
   .hero-slogan {
-    font-size: 16px;
+    font-size: 15px;
   }
   .story-tagline,
   .story-years {
-    font-size: 44px;
-    line-height: 1.1;
+    font-size: 32px;
+    line-height: 1.15;
   }
   .story-intro,
   .story-projects,
   .story-prizes {
-    font-size: 18px;
-    line-height: 1.5;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .view-more {
+    font-size: 16px;
   }
   .choices-title {
-    font-size: 32px;
+    font-size: 26px;
   }
   .choices-lead {
-    margin-top: 48px;
+    margin-top: 40px;
+    padding: 0 var(--gutter);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .choice-pill {
+    width: 220px;
+    height: 48px;
+    border-width: 2px;
     font-size: 18px;
+    line-height: 44px;
+  }
+  .choice-card p {
+    font-size: 15px;
   }
   .choice-card {
     width: 100%;
+    height: auto;
+    padding: 24px 16px 28px;
+  }
+  .choice-card img {
+    width: 86px;
+    height: 86px;
+  }
+  .choice-card .choice-pill {
+    margin-top: 16px;
+  }
+  .choice-card p {
+    margin-top: 14px;
   }
   .curriculum-title {
-    font-size: 36px;
+    font-size: 32px;
   }
   .qna dt {
-    font-size: 20px;
+    font-size: 17px;
   }
   .qna dd {
-    padding: 24px;
-    font-size: 16px;
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.6;
   }
 }
 
@@ -758,7 +979,7 @@ img {
 .admin {
   max-width: 960px;
   margin: 0 auto;
-  padding: 32px 16px 120px;
+  padding: 32px 24px 120px;
 }
 .admin h1 {
   margin-top: 24px;
