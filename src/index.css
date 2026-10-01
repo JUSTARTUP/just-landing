@@ -152,7 +152,7 @@ img {
   translate: 0 48px;
   transition: opacity 0.9s cubic-bezier(0.33, 1, 0.68, 1),
     translate 0.9s cubic-bezier(0.33, 1, 0.68, 1);
-  transition-delay: calc(var(--i, 0) * 400ms);
+  transition-delay: calc(var(--i, 0) * 250ms);
 }
 .reveal.is-visible {
   opacity: 1;
@@ -300,7 +300,7 @@ img {
     translate: none;
     transition: none;
     animation: step-rise 0.9s cubic-bezier(0.33, 1, 0.68, 1)
-      calc(var(--i, 0) * 400ms) backwards;
+      calc(var(--i, 0) * 250ms) backwards;
   }
 }
 @keyframes step-rise {
